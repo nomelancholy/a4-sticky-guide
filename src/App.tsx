@@ -50,7 +50,7 @@ function App() {
   };
 
   return (
-    <div className="flex min-h-screen bg-slate-50 font-sans text-slate-800 selection:bg-indigo-100 selection:text-indigo-900">
+    <div className="flex flex-col lg:flex-row min-h-screen bg-slate-50 font-sans text-slate-800 selection:bg-indigo-100 selection:text-indigo-900">
       <Sidebar 
         layouts={layouts}
         selectedLayoutId={selectedLayoutId}
@@ -62,8 +62,8 @@ function App() {
         updateItem={updateItem}
       />
       
-      <main className="flex-1 overflow-auto flex flex-col items-center py-12 px-8 print:p-0 bg-gradient-to-br from-slate-100 via-slate-50 to-gray-200 print:bg-white">
-        <div className="w-full max-w-4xl flex justify-between items-center mb-6 print:hidden">
+      <main className="flex-1 overflow-auto flex flex-col items-center py-6 lg:py-12 px-4 lg:px-8 print:p-0 bg-gradient-to-br from-slate-100 via-slate-50 to-gray-200 print:bg-white w-full">
+        <div className="w-full max-w-[210mm] lg:max-w-4xl flex justify-between items-center mb-6 print:hidden">
           <h2 className="text-xl font-bold text-slate-700 tracking-tight">미리보기 (Preview)</h2>
           <div className="text-sm text-slate-500 bg-white px-4 py-2 rounded-full shadow-sm border border-slate-100">
             A4 기준 • {selectedLayout.a4Orientation === 'landscape' ? '가로 방향' : '세로 방향'}

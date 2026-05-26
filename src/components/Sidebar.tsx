@@ -36,7 +36,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   };
 
   return (
-    <aside className="w-80 lg:w-96 bg-white/80 backdrop-blur-xl border-r border-slate-200 shadow-2xl shadow-slate-200/50 flex flex-col h-screen print:hidden z-10">
+    <aside className="w-full lg:w-80 xl:w-96 bg-white/80 backdrop-blur-xl border-b lg:border-b-0 lg:border-r border-slate-200 shadow-xl lg:shadow-2xl shadow-slate-200/50 flex flex-col h-auto lg:h-screen print:hidden z-10">
       <div className="p-6 border-b border-slate-100 bg-white/50">
         <div className="flex items-center space-x-3">
           <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center shadow-inner">
