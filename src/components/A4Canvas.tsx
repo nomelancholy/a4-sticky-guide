@@ -7,6 +7,7 @@ interface A4CanvasProps {
   items: PostItItem[];
   updateItem: (id: number, updates: Partial<PostItItem>) => void;
   showGuideInPrint: boolean;
+  isColorMode: boolean;
   onApplyToAll: (id: number) => void;
 }
 
@@ -15,6 +16,7 @@ const A4Canvas: React.FC<A4CanvasProps> = ({
   items,
   updateItem,
   showGuideInPrint,
+  isColorMode,
   onApplyToAll
 }) => {
   const isLandscape = layout.a4Orientation === 'landscape';
@@ -62,6 +64,7 @@ const A4Canvas: React.FC<A4CanvasProps> = ({
               layout={layout}
               updateItem={updateItem}
               showGuideInPrint={showGuideInPrint}
+              isColorMode={isColorMode}
               onApplyToAll={() => onApplyToAll(item.id)}
               isFirst={index === 0}
             />

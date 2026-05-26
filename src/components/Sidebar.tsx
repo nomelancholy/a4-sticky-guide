@@ -10,6 +10,8 @@ interface SidebarProps {
   onPrint: () => void;
   items: PostItItem[];
   updateItem: (id: number, updates: Partial<PostItItem>) => void;
+  isColorMode: boolean;
+  onToggleColorMode: () => void;
 }
 
 const Sidebar: React.FC<SidebarProps> = ({
@@ -18,6 +20,8 @@ const Sidebar: React.FC<SidebarProps> = ({
   onSelectLayout,
   showGuideInPrint,
   onToggleGuide,
+  isColorMode,
+  onToggleColorMode,
   onPrint,
 }) => {
   const [showPrintWarning, setShowPrintWarning] = useState(false);
@@ -138,20 +142,56 @@ const Sidebar: React.FC<SidebarProps> = ({
           </p>
         </section>
 
+        {/* Support Banner */}
+        <section className="bg-amber-50 border border-amber-200 rounded-xl p-4 flex flex-col items-center shadow-sm">
+          <span className="text-3xl mb-2 drop-shadow-sm">🍺</span>
+          <h2 className="text-sm font-extrabold text-amber-900 mb-1">개발자에게 시원한 맥주 한 잔!</h2>
+          <p className="text-xs text-amber-700/90 text-center mb-4 font-medium leading-relaxed">
+            포스트잇 인쇄 가이드가 유용하셨나요?<br/>작은 후원이 업데이트에 큰 힘이 됩니다 💛
+          </p>
+          <a 
+            href="#"
+            className="w-full flex items-center justify-center space-x-2 bg-[#FEE500] hover:bg-[#F4DC00] text-[#191919] font-bold py-2.5 px-4 rounded-lg transition-all shadow-sm hover:shadow active:scale-[0.98]"
+            onClick={(e) => {
+              e.preventDefault();
+              alert('여기에 실제 카카오페이 송금 링크를 연결해주세요!\n예: https://qr.kakaopay.com/...');
+            }}
+          >
+            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+               <path d="M12 3C6.477 3 2 6.582 2 11c0 2.825 1.724 5.32 4.382 6.848-.344 1.258-1.246 4.542-1.285 4.707-.052.215.195.334.37.215.228-.155 3.33-2.28 4.606-3.183.626.096 1.272.146 1.927.146 5.523 0 10-3.582 10-8s-4.477-8-10-8z"/>
+            </svg>
+            <span className="tracking-tight">카카오페이 송금하기</span>
+          </a>
+        </section>
+
       </div>
 
       <div className="p-4 bg-white/90 border-t border-slate-100 backdrop-blur-lg space-y-3 shadow-[0_-10px_20px_-5px_rgba(0,0,0,0.05)]">
-        <label className="flex items-center justify-center space-x-2 cursor-pointer group bg-slate-50 p-2.5 rounded-lg border border-slate-200 hover:bg-slate-100 transition-colors">
-          <input 
-            type="checkbox" 
-            checked={showGuideInPrint}
-            onChange={onToggleGuide}
-            className="w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500 border-slate-300"
-          />
-          <span className="text-xs font-bold text-slate-600 group-hover:text-slate-800 transition-colors">
-            가이드선(테두리) 함께 인쇄
-          </span>
-        </label>
+        <div className="flex space-x-2">
+          <label className="flex-1 flex items-center justify-center space-x-2 cursor-pointer group bg-slate-50 p-2.5 rounded-lg border border-slate-200 hover:bg-slate-100 transition-colors">
+            <input 
+              type="checkbox" 
+              checked={showGuideInPrint}
+              onChange={onToggleGuide}
+              className="w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500 border-slate-300"
+            />
+            <span className="text-[11px] font-bold text-slate-600 group-hover:text-slate-800 transition-colors whitespace-nowrap">
+              가이드선 인쇄
+            </span>
+          </label>
+
+          <label className="flex-1 flex items-center justify-center space-x-2 cursor-pointer group bg-slate-50 p-2.5 rounded-lg border border-slate-200 hover:bg-slate-100 transition-colors">
+            <input 
+              type="checkbox" 
+              checked={!isColorMode}
+              onChange={onToggleColorMode}
+              className="w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500 border-slate-300"
+            />
+            <span className="text-[11px] font-bold text-slate-600 group-hover:text-slate-800 transition-colors whitespace-nowrap">
+              흑백 모드
+            </span>
+          </label>
+        </div>
 
         <button 
           onClick={handlePrintClick}

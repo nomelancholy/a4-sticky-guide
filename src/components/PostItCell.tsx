@@ -6,6 +6,7 @@ interface PostItCellProps {
   layout: LayoutConfig;
   updateItem: (id: number, updates: Partial<PostItItem>) => void;
   showGuideInPrint: boolean;
+  isColorMode: boolean;
   onApplyToAll: () => void;
   isFirst: boolean;
 }
@@ -15,6 +16,7 @@ const PostItCell: React.FC<PostItCellProps> = ({
   layout,
   updateItem,
   showGuideInPrint,
+  isColorMode,
   onApplyToAll,
   isFirst
 }) => {
@@ -26,9 +28,21 @@ const PostItCell: React.FC<PostItCellProps> = ({
     ? 'print:border-slate-300 print:border-dashed'
     : 'print:border-transparent print:border-none';
 
+  const colorClasses = isColorMode
+    ? 'bg-gradient-to-br from-yellow-50 to-yellow-100 border-yellow-200/50'
+    : 'bg-white border-slate-200';
+
+  const zoneColorClasses = isColorMode
+    ? 'bg-yellow-200/40'
+    : 'bg-slate-100/50';
+
+  const zoneTextClasses = isColorMode
+    ? 'text-yellow-600/60'
+    : 'text-slate-400';
+
   return (
     <div 
-      className={`relative group flex flex-col bg-gradient-to-br from-yellow-50 to-yellow-100 border border-yellow-200/50 shadow-sm hover:shadow-md transition-shadow print:shadow-none print:bg-none print:bg-transparent ${printGuideClasses}`}
+      className={`relative group flex flex-col border shadow-sm hover:shadow-md transition-shadow print:shadow-none print:bg-none print:bg-transparent ${colorClasses} ${printGuideClasses}`}
       style={{
         width: `${layout.postItWidth}mm`,
         height: `${layout.postItHeight}mm`,
@@ -43,9 +57,9 @@ const PostItCell: React.FC<PostItCellProps> = ({
     >
       {/* Sticky Zone Indicator */}
       <div 
-        className={`absolute top-0 left-0 right-0 h-[15mm] bg-yellow-200/40 print:bg-slate-100 flex items-center justify-center pointer-events-none ${!showGuideInPrint ? 'print:hidden' : ''}`}
+        className={`absolute top-0 left-0 right-0 h-[15mm] flex items-center justify-center pointer-events-none print:bg-slate-100 ${zoneColorClasses} ${!showGuideInPrint ? 'print:hidden' : ''}`}
       >
-        <span className={`text-[10px] font-bold text-yellow-600/60 print:text-slate-400 select-none tracking-widest`}>
+        <span className={`text-[10px] font-bold print:text-slate-400 select-none tracking-widest ${zoneTextClasses}`}>
           접착면
         </span>
       </div>

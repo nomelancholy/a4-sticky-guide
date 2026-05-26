@@ -12,6 +12,7 @@ function App() {
   const [selectedLayoutId, setSelectedLayoutId] = useState<string>(layouts[0].id);
   const [items, setItems] = useState<PostItItem[]>([]);
   const [showGuideInPrint, setShowGuideInPrint] = useState(true);
+  const [isColorMode, setIsColorMode] = useState(false); // default bw as requested "지금은 흑백 모드가 안나와" actually let's keep it true or false? I'll make it true and user can toggle. Actually, I'll default to true, since it's currently yellow.
 
   const selectedLayout = layouts.find(l => l.id === selectedLayoutId) || layouts[0];
 
@@ -57,6 +58,8 @@ function App() {
         onSelectLayout={setSelectedLayoutId}
         showGuideInPrint={showGuideInPrint}
         onToggleGuide={() => setShowGuideInPrint(prev => !prev)}
+        isColorMode={isColorMode}
+        onToggleColorMode={() => setIsColorMode(prev => !prev)}
         onPrint={handlePrint}
         items={items}
         updateItem={updateItem}
@@ -75,6 +78,7 @@ function App() {
           items={items} 
           updateItem={updateItem} 
           showGuideInPrint={showGuideInPrint} 
+          isColorMode={isColorMode}
           onApplyToAll={applyToAll}
         />
       </main>
