@@ -1,0 +1,31 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Roboto:wght@400;500;700&display=swap');
+
+@import "tailwindcss";
+
+@layer utilities {
+  .print\:hidden {
+    @media print {
+      display: none !important;
+    }
+  }
+  .print\:m-0 {
+    @media print {
+      margin: 0 !important;
+    }
+  }
+  .print\:shadow-none {
+    @media print {
+      box-shadow: none !important;
+    }
+  }
+}
+
+@media print {
+  @page {
+    margin: 0;
+  }
+  body {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
