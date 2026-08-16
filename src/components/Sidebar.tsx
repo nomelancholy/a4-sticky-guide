@@ -142,25 +142,20 @@ const Sidebar: React.FC<SidebarProps> = ({
           </p>
         </section>
 
-        {/* Support Banner */}
+        {/* Feedback Banner */}
         <section className="bg-amber-50 border border-amber-200 rounded-xl p-4 flex flex-col items-center shadow-sm">
-          <span className="text-3xl mb-2 drop-shadow-sm">🍺</span>
-          <h2 className="text-sm font-extrabold text-amber-900 mb-1">개발자에게 시원한 맥주 한 잔!</h2>
+          <span className="text-3xl mb-2 drop-shadow-sm" aria-hidden="true">💬</span>
+          <h2 className="text-sm font-extrabold text-amber-900 mb-1">더 나은 가이드를 함께 만들어요</h2>
           <p className="text-xs text-amber-700/90 text-center mb-4 font-medium leading-relaxed">
-            포스트잇 인쇄 가이드가 유용하셨나요?<br/>작은 후원이 업데이트에 큰 힘이 됩니다 💛
+            맞지 않는 규격이나 인쇄 오류가 있다면<br/>GitHub에서 알려주세요.
           </p>
           <a 
-            href="#"
-            className="w-full flex items-center justify-center space-x-2 bg-[#FEE500] hover:bg-[#F4DC00] text-[#191919] font-bold py-2.5 px-4 rounded-lg transition-all shadow-sm hover:shadow active:scale-[0.98]"
-            onClick={(e) => {
-              e.preventDefault();
-              alert('여기에 실제 카카오페이 송금 링크를 연결해주세요!\n예: https://qr.kakaopay.com/...');
-            }}
+            href="https://github.com/nomelancholy/a4-sticky-guide/issues"
+            target="_blank"
+            rel="noreferrer"
+            className="w-full flex items-center justify-center space-x-2 bg-slate-900 hover:bg-slate-800 text-white font-bold py-2.5 px-4 rounded-lg transition-all shadow-sm hover:shadow active:scale-[0.98]"
           >
-            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-               <path d="M12 3C6.477 3 2 6.582 2 11c0 2.825 1.724 5.32 4.382 6.848-.344 1.258-1.246 4.542-1.285 4.707-.052.215.195.334.37.215.228-.155 3.33-2.28 4.606-3.183.626.096 1.272.146 1.927.146 5.523 0 10-3.582 10-8s-4.477-8-10-8z"/>
-            </svg>
-            <span className="tracking-tight">카카오페이 송금하기</span>
+            <span className="tracking-tight">오류 제보 및 기능 제안</span>
           </a>
         </section>
 
@@ -205,12 +200,18 @@ const Sidebar: React.FC<SidebarProps> = ({
       {/* Print Warning Modal */}
       {showPrintWarning && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm transition-opacity">
-          <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full mx-4 transform scale-100 transition-transform">
+          <div
+            className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full mx-4 transform scale-100 transition-transform"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="print-warning-title"
+            aria-describedby="print-warning-description"
+          >
             <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mb-6">
               <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
             </div>
-            <h3 className="text-2xl font-bold text-slate-900 mb-2">프린터 설정 확인</h3>
-            <p className="text-slate-500 mb-6 leading-relaxed">
+            <h3 id="print-warning-title" className="text-2xl font-bold text-slate-900 mb-2">프린터 설정 확인</h3>
+            <p id="print-warning-description" className="text-slate-500 mb-6 leading-relaxed">
               실제 사이즈로 정확하게 인쇄하기 위해, 인쇄 대화창에서 다음 설정을 반드시 확인해주세요.
             </p>
             <div className="bg-slate-50 rounded-xl p-4 mb-8 border border-slate-100 space-y-3">

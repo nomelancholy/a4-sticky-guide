@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://a4-sticky-guide.vercel.app/sitemap.xml

@@ -1,6 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Sidebar from './components/Sidebar';
 import A4Canvas from './components/A4Canvas';
+import AdBanner from './components/AdBanner';
+import GuideContent from './components/GuideContent';
+import SiteFooter from './components/SiteFooter';
 import type { PostItItem } from './types';
 import { layouts } from './data/layouts';
 
@@ -8,26 +11,31 @@ const DEFAULT_FONT_SIZE = 14;
 const DEFAULT_FONT_FAMILY = 'Inter';
 const DEFAULT_TEXT_ALIGN = 'left';
 
+const createItems = (layoutId: string): PostItItem[] => {
+  const layout = layouts.find((candidate) => candidate.id === layoutId) ?? layouts[0];
+  const totalItems = layout.cols * layout.rows;
+
+  return Array.from({ length: totalItems }, (_, index) => ({
+    id: index,
+    text: '',
+    fontSize: DEFAULT_FONT_SIZE,
+    fontFamily: DEFAULT_FONT_FAMILY,
+    textAlign: DEFAULT_TEXT_ALIGN,
+  }));
+};
+
 function App() {
   const [selectedLayoutId, setSelectedLayoutId] = useState<string>(layouts[0].id);
-  const [items, setItems] = useState<PostItItem[]>([]);
+  const [items, setItems] = useState<PostItItem[]>(() => createItems(layouts[0].id));
   const [showGuideInPrint, setShowGuideInPrint] = useState(true);
-  const [isColorMode, setIsColorMode] = useState(false); // default bw as requested "지금은 흑백 모드가 안나와" actually let's keep it true or false? I'll make it true and user can toggle. Actually, I'll default to true, since it's currently yellow.
+  const [isColorMode, setIsColorMode] = useState(false);
 
   const selectedLayout = layouts.find(l => l.id === selectedLayoutId) || layouts[0];
 
-  // Initialize items when layout changes
-  useEffect(() => {
-    const totalItems = selectedLayout.cols * selectedLayout.rows;
-    const initialItems: PostItItem[] = Array.from({ length: totalItems }, (_, i) => ({
-      id: i,
-      text: '',
-      fontSize: DEFAULT_FONT_SIZE,
-      fontFamily: DEFAULT_FONT_FAMILY,
-      textAlign: DEFAULT_TEXT_ALIGN,
-    }));
-    setItems(initialItems);
-  }, [selectedLayout.id]);
+  const handleSelectLayout = (layoutId: string) => {
+    setSelectedLayoutId(layoutId);
+    setItems(createItems(layoutId));
+  };
 
   const updateItem = (id: number, updates: Partial<PostItItem>) => {
     setItems(prev => prev.map(item => item.id === id ? { ...item, ...updates } : item));
@@ -55,7 +63,7 @@ function App() {
       <Sidebar 
         layouts={layouts}
         selectedLayoutId={selectedLayoutId}
-        onSelectLayout={setSelectedLayoutId}
+        onSelectLayout={handleSelectLayout}
         showGuideInPrint={showGuideInPrint}
         onToggleGuide={() => setShowGuideInPrint(prev => !prev)}
         isColorMode={isColorMode}
@@ -72,6 +80,8 @@ function App() {
             A4 기준 • {selectedLayout.a4Orientation === 'landscape' ? '가로 방향' : '세로 방향'}
           </div>
         </div>
+
+        <AdBanner />
         
         <A4Canvas 
           layout={selectedLayout} 
@@ -81,6 +91,9 @@ function App() {
           isColorMode={isColorMode}
           onApplyToAll={applyToAll}
         />
+
+        <GuideContent />
+        <SiteFooter />
       </main>
     </div>
   );

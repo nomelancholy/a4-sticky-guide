@@ -67,6 +67,7 @@ const PostItCell: React.FC<PostItCellProps> = ({
       {/* Editor Toolbar */}
       <div className={`absolute -top-12 left-1/2 -translate-x-1/2 flex items-center justify-center space-x-1.5 bg-slate-800/90 backdrop-blur-md shadow-xl border border-slate-700/50 rounded-lg p-1.5 z-20 transition-all duration-200 print:hidden ${isFocused || isFirst ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0'}`}>
         <select 
+          aria-label={`${item.id + 1}번 포스트잇 글꼴`}
           className="text-xs font-medium bg-slate-700/50 text-white border-none rounded-md px-2 py-1.5 focus:ring-1 focus:ring-indigo-400 outline-none cursor-pointer"
           value={item.fontFamily}
           onChange={e => updateItem(item.id, { fontFamily: e.target.value })}
@@ -80,6 +81,7 @@ const PostItCell: React.FC<PostItCellProps> = ({
         <div className="flex items-center bg-slate-700/50 rounded-md px-1">
           <input 
             type="number" 
+            aria-label={`${item.id + 1}번 포스트잇 글자 크기`}
             className="text-xs font-medium bg-transparent text-white border-none w-10 py-1.5 text-center focus:ring-1 focus:ring-indigo-400 outline-none"
             value={item.fontSize}
             onChange={e => updateItem(item.id, { fontSize: Number(e.target.value) })}
@@ -94,8 +96,9 @@ const PostItCell: React.FC<PostItCellProps> = ({
             <button
               key={align}
               className={`p-1.5 rounded-sm transition-colors ${item.textAlign === align ? 'bg-indigo-500 text-white shadow-sm' : 'text-slate-300 hover:text-white hover:bg-slate-600'}`}
-              onClick={() => updateItem(item.id, { textAlign: align as any })}
+              onClick={() => updateItem(item.id, { textAlign: align as PostItItem['textAlign'] })}
               title={`정렬: ${align}`}
+              aria-label={`${item.id + 1}번 포스트잇 ${align} 정렬`}
             >
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 {align === 'left' && <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h10M4 18h16"></path>}
@@ -120,6 +123,7 @@ const PostItCell: React.FC<PostItCellProps> = ({
 
       {/* Textarea */}
       <textarea
+        aria-label={`${item.id + 1}번 포스트잇 내용`}
         className="w-full h-full bg-transparent resize-none focus:outline-none p-3 pt-[18mm] z-0 overflow-hidden leading-snug text-slate-800 placeholder:text-yellow-600/30 print:placeholder:text-transparent print:text-black"
         style={{
           fontSize: `${item.fontSize}px`,
