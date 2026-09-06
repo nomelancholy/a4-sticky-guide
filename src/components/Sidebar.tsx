@@ -41,15 +41,27 @@ const Sidebar: React.FC<SidebarProps> = ({
 
   return (
     <aside className="w-full lg:w-80 xl:w-96 bg-white/80 backdrop-blur-xl border-b lg:border-b-0 lg:border-r border-slate-200 shadow-xl lg:shadow-2xl shadow-slate-200/50 flex flex-col h-auto lg:h-screen print:hidden z-10">
-      <div className="p-6 border-b border-slate-100 bg-white/50">
-        <div className="flex items-center space-x-3">
-          <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center shadow-inner">
-            <span className="text-white font-bold text-sm">A4</span>
+      <div className="p-4 sm:p-6 border-b border-slate-100 bg-white/50">
+        <div className="flex items-center justify-between gap-2 sm:gap-3">
+          <div className="flex min-w-0 items-center space-x-3">
+            <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center shadow-inner shrink-0">
+              <span className="text-white font-bold text-sm">A4</span>
+            </div>
+            <div className="min-w-0">
+              <h1 className="text-xl font-extrabold text-slate-800 tracking-tight whitespace-nowrap">Sticky Guide</h1>
+              <p className="text-xs text-indigo-600 font-semibold tracking-wide uppercase mt-0.5 whitespace-nowrap">Perfect Print Alignment</p>
+            </div>
           </div>
-          <div>
-            <h1 className="text-xl font-extrabold text-slate-800 tracking-tight">Sticky Guide</h1>
-            <p className="text-xs text-indigo-600 font-semibold tracking-wide uppercase mt-0.5">Perfect Print Alignment</p>
-          </div>
+          <a
+            href="https://link.kakaopay.com/__/1FfrjxZ"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="shrink-0 inline-flex items-center gap-1.5 rounded-full bg-[#FEE500] px-2.5 sm:px-3 py-2 text-xs font-extrabold text-[#191919] shadow-sm transition-all hover:bg-[#FADA0A] hover:shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-500 focus-visible:ring-offset-2 active:scale-[0.97]"
+            aria-label="카카오페이로 후원하기 (새 탭에서 열림)"
+          >
+            <span aria-hidden="true">♥</span>
+            <span>후원하기</span>
+          </a>
         </div>
       </div>
 
@@ -159,33 +171,26 @@ const Sidebar: React.FC<SidebarProps> = ({
           </a>
         </section>
 
-        {/* Support Banner */}
-        <section className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 flex flex-col items-center shadow-sm">
-          <span className="text-3xl mb-2 drop-shadow-sm" aria-hidden="true">☕</span>
-          <h2 className="text-sm font-extrabold text-slate-900 mb-1">이 도구가 도움이 되셨나요?</h2>
-          <p className="text-xs text-slate-600 text-center mb-4 font-medium leading-relaxed">
-            작은 후원은 서비스를 계속 운영하고<br/>더 나은 기능을 만드는 데 도움이 됩니다.
-          </p>
-          <a
-            href="https://link.kakaopay.com/__/1FfrjxZ"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-full flex items-center justify-center gap-2 bg-[#FEE500] hover:bg-[#FADA0A] text-[#191919] font-extrabold py-2.5 px-4 rounded-lg transition-all shadow-sm hover:shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-500 focus-visible:ring-offset-2 active:scale-[0.98]"
-            aria-label="카카오페이로 후원하기 (새 탭에서 열림)"
-          >
-            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M12 20.25S4.5 15.9 4.5 9.75A4.25 4.25 0 0 1 12 7a4.25 4.25 0 0 1 7.5 2.75c0 6.15-7.5 10.5-7.5 10.5Z" fill="currentColor" />
-            </svg>
-            <span className="tracking-tight">카카오페이로 후원하기</span>
-          </a>
-          <p className="mt-3 text-[10px] text-slate-500 text-center">
-            후원은 선택이며 서비스 이용에 영향을 주지 않습니다.
-          </p>
-        </section>
-
       </div>
 
       <div className="p-4 bg-white/90 border-t border-slate-100 backdrop-blur-lg space-y-3 shadow-[0_-10px_20px_-5px_rgba(0,0,0,0.05)]">
+        <a
+          href="https://link.kakaopay.com/__/1FfrjxZ"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group w-full flex items-center gap-3 bg-[#FEE500] hover:bg-[#FADA0A] text-[#191919] py-3 px-4 rounded-xl transition-all shadow-md hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-500 focus-visible:ring-offset-2 active:scale-[0.98]"
+          aria-label="카카오페이로 후원하기 (새 탭에서 열림)"
+        >
+          <span className="w-8 h-8 shrink-0 rounded-full bg-[#191919] text-[#FEE500] flex items-center justify-center text-sm" aria-hidden="true">♥</span>
+          <span className="min-w-0 flex-1 text-left">
+            <span className="block text-sm font-extrabold tracking-tight">카카오페이로 후원하기</span>
+            <span className="block text-[10px] font-semibold text-slate-700">무료 도구의 운영을 응원해 주세요</span>
+          </span>
+          <svg className="w-4 h-4 shrink-0 transition-transform group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+            <path strokeLinecap="round" strokeLinejoin="round" d="m9 18 6-6-6-6" />
+          </svg>
+        </a>
+
         <div className="flex space-x-2">
           <label className="flex-1 flex items-center justify-center space-x-2 cursor-pointer group bg-slate-50 p-2.5 rounded-lg border border-slate-200 hover:bg-slate-100 transition-colors">
             <input 
