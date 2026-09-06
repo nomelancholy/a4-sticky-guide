@@ -159,6 +159,30 @@ const Sidebar: React.FC<SidebarProps> = ({
           </a>
         </section>
 
+        {/* Support Banner */}
+        <section className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 flex flex-col items-center shadow-sm">
+          <span className="text-3xl mb-2 drop-shadow-sm" aria-hidden="true">☕</span>
+          <h2 className="text-sm font-extrabold text-slate-900 mb-1">이 도구가 도움이 되셨나요?</h2>
+          <p className="text-xs text-slate-600 text-center mb-4 font-medium leading-relaxed">
+            작은 후원은 서비스를 계속 운영하고<br/>더 나은 기능을 만드는 데 도움이 됩니다.
+          </p>
+          <a
+            href="https://link.kakaopay.com/__/1FfrjxZ"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full flex items-center justify-center gap-2 bg-[#FEE500] hover:bg-[#FADA0A] text-[#191919] font-extrabold py-2.5 px-4 rounded-lg transition-all shadow-sm hover:shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-500 focus-visible:ring-offset-2 active:scale-[0.98]"
+            aria-label="카카오페이로 후원하기 (새 탭에서 열림)"
+          >
+            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 20.25S4.5 15.9 4.5 9.75A4.25 4.25 0 0 1 12 7a4.25 4.25 0 0 1 7.5 2.75c0 6.15-7.5 10.5-7.5 10.5Z" fill="currentColor" />
+            </svg>
+            <span className="tracking-tight">카카오페이로 후원하기</span>
+          </a>
+          <p className="mt-3 text-[10px] text-slate-500 text-center">
+            후원은 선택이며 서비스 이용에 영향을 주지 않습니다.
+          </p>
+        </section>
+
       </div>
 
       <div className="p-4 bg-white/90 border-t border-slate-100 backdrop-blur-lg space-y-3 shadow-[0_-10px_20px_-5px_rgba(0,0,0,0.05)]">
