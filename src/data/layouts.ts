@@ -10,7 +10,9 @@ export const layouts: LayoutConfig[] = [
     rows: 3,
     a4Orientation: 'portrait',
     gap: 'gap-[3mm]',
-    description: '가로 2열 × 세로 3행 (총 6개)'
+    description: '가로 2열 × 세로 3행 (총 6개)',
+    stickyZoneMm: 15,
+    textTopMm: 18,
   },
   {
     id: 'rect-medium',
@@ -21,7 +23,9 @@ export const layouts: LayoutConfig[] = [
     rows: 5,
     a4Orientation: 'portrait',
     gap: 'gap-[2mm]',
-    description: '가로 2열 × 세로 5행 (총 10개)'
+    description: '가로 2열 × 세로 5행 (총 10개)',
+    stickyZoneMm: 15,
+    textTopMm: 18,
   },
   {
     id: 'mini',
@@ -32,7 +36,9 @@ export const layouts: LayoutConfig[] = [
     rows: 4,
     a4Orientation: 'portrait',
     gap: 'gap-[2mm]',
-    description: '가로 5열 × 세로 4행 (총 20개)'
+    description: '가로 5열 × 세로 4행 (총 20개)',
+    stickyZoneMm: 15,
+    textTopMm: 18,
   },
   {
     id: 'large-rect',
@@ -43,7 +49,9 @@ export const layouts: LayoutConfig[] = [
     rows: 1,
     a4Orientation: 'landscape',
     gap: 'gap-[5mm]',
-    description: '가로 2열 × 세로 1행 (총 2개)'
+    description: '가로 2열 × 세로 1행 (총 2개)',
+    stickyZoneMm: 15,
+    textTopMm: 18,
   },
   {
     id: 'large-square',
@@ -54,28 +62,36 @@ export const layouts: LayoutConfig[] = [
     rows: 2,
     a4Orientation: 'portrait',
     gap: 'gap-[4mm]',
-    description: '가로 2열 × 세로 2행 (총 4개)'
+    description: '가로 2열 × 세로 2행 (총 4개)',
+    stickyZoneMm: 15,
+    textTopMm: 18,
   },
+  // 플래그는 접착면이 긴 변의 끝(짧은 변 쪽)에 있으므로 세로로 세워
+  // 접착면이 급지 방향(위)을 향하게 배치한다.
   {
     id: 'flag-mini',
-    name: '플래그 미니 (43.1x11.9mm)',
-    postItWidth: 43.1,
-    postItHeight: 11.9,
-    cols: 4,
-    rows: 6,
+    name: '플래그 미니 (11.9x43.1mm)',
+    postItWidth: 11.9,
+    postItHeight: 43.1,
+    cols: 8,
+    rows: 4,
     a4Orientation: 'portrait',
-    gap: 'gap-y-[20mm] gap-x-[5mm]',
-    description: '가로 4열 × 세로 6행 (총 24개, 넉넉한 간격)'
+    gap: 'gap-x-[12mm] gap-y-[15mm]',
+    description: '가로 8열 × 세로 4행 (총 32개, 넉넉한 간격)',
+    stickyZoneMm: 11,
+    textTopMm: 13,
   },
   {
     id: 'flag-wide',
-    name: '플래그 와이드 (43.1x25.4mm)',
-    postItWidth: 43.1,
-    postItHeight: 25.4,
-    cols: 4,
-    rows: 5,
+    name: '플래그 와이드 (25.4x43.1mm)',
+    postItWidth: 25.4,
+    postItHeight: 43.1,
+    cols: 5,
+    rows: 4,
     a4Orientation: 'portrait',
-    gap: 'gap-y-[15mm] gap-x-[5mm]',
-    description: '가로 4열 × 세로 5행 (총 20개)'
-  }
+    gap: 'gap-x-[12mm] gap-y-[15mm]',
+    description: '가로 5열 × 세로 4행 (총 20개)',
+    stickyZoneMm: 11,
+    textTopMm: 13,
+  },
 ];

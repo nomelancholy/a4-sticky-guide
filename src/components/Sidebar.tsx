@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
-import type { LayoutConfig, PostItItem } from '../types';
+import type { LayoutConfig, PreviewTone } from '../types';
+import ActionPanel from './ActionPanel';
+import SidebarContent from './SidebarContent';
+import Brand from './Brand';
 
 interface SidebarProps {
   layouts: LayoutConfig[];
@@ -7,277 +9,42 @@ interface SidebarProps {
   onSelectLayout: (id: string) => void;
   showGuideInPrint: boolean;
   onToggleGuide: () => void;
+  previewTone: PreviewTone;
+  onChangeTone: (tone: PreviewTone) => void;
   onPrint: () => void;
-  items: PostItItem[];
-  updateItem: (id: number, updates: Partial<PostItItem>) => void;
-  isColorMode: boolean;
-  onToggleColorMode: () => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({
+/** 데스크톱(lg 이상) 전용 사이드바. 모바일은 MobileChrome이 담당한다. */
+export default function Sidebar({
   layouts,
   selectedLayoutId,
   onSelectLayout,
   showGuideInPrint,
   onToggleGuide,
-  isColorMode,
-  onToggleColorMode,
+  previewTone,
+  onChangeTone,
   onPrint,
-}) => {
-  const [showPrintWarning, setShowPrintWarning] = useState(false);
-
-  const selectedLayout = layouts.find(l => l.id === selectedLayoutId) || layouts[0];
-
-  const handlePrintClick = () => {
-    setShowPrintWarning(true);
-  };
-
-  const confirmPrint = () => {
-    setShowPrintWarning(false);
-    setTimeout(() => {
-      onPrint();
-    }, 100);
-  };
-
+}: SidebarProps) {
   return (
-    <aside className="w-full lg:w-80 xl:w-96 bg-white/80 backdrop-blur-xl border-b lg:border-b-0 lg:border-r border-slate-200 shadow-xl lg:shadow-2xl shadow-slate-200/50 flex flex-col h-auto lg:h-screen print:hidden z-10">
-      <div className="p-4 sm:p-6 border-b border-slate-100 bg-white/50">
-        <div className="flex items-center justify-between gap-2 sm:gap-3">
-          <div className="flex min-w-0 items-center space-x-3">
-            <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center shadow-inner shrink-0">
-              <span className="text-white font-bold text-sm">A4</span>
-            </div>
-            <div className="min-w-0">
-              <h1 className="text-xl font-extrabold text-slate-800 tracking-tight whitespace-nowrap">Sticky Guide</h1>
-              <p className="text-xs text-indigo-600 font-semibold tracking-wide uppercase mt-0.5 whitespace-nowrap">Perfect Print Alignment</p>
-            </div>
-          </div>
-          <a
-            href="https://link.kakaopay.com/__/1FfrjxZ"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="shrink-0 inline-flex items-center gap-1.5 rounded-full bg-[#FEE500] px-2.5 sm:px-3 py-2 text-xs font-extrabold text-[#191919] shadow-sm transition-all hover:bg-[#FADA0A] hover:shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-500 focus-visible:ring-offset-2 active:scale-[0.97]"
-            aria-label="카카오페이로 후원하기 (새 탭에서 열림)"
-          >
-            <span aria-hidden="true">♥</span>
-            <span>후원하기</span>
-          </a>
-        </div>
+    <aside className="z-10 hidden h-screen w-80 flex-col border-r border-slate-200 bg-white/80 shadow-2xl shadow-slate-200/50 backdrop-blur-xl lg:flex xl:w-96 print:hidden">
+      <div className="border-b border-slate-100 bg-white/50 p-6">
+        <Brand />
       </div>
 
-      <div className="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-8">
-        
-        {/* Usage Guide Banner */}
-        <section className="bg-indigo-50/50 border border-indigo-100 rounded-xl p-4 shadow-sm">
-          <h2 className="text-sm font-bold text-indigo-800 flex items-center mb-3">
-            <span className="mr-2">💡</span> 이렇게 사용하세요!
-          </h2>
-          <ol className="space-y-3 text-xs text-indigo-900/80 leading-relaxed font-medium">
-            <li className="flex gap-2">
-              <span className="bg-indigo-200 text-indigo-800 w-4 h-4 rounded-full flex items-center justify-center shrink-0 mt-0.5">1</span>
-              <span><strong>빈 A4 용지</strong>에 현재 가이드라인을 먼저 인쇄하세요. <br/><span className="text-indigo-600/70">(가이드선 인쇄 체크 필수)</span></span>
-            </li>
-            <li className="flex gap-2">
-              <span className="bg-indigo-200 text-indigo-800 w-4 h-4 rounded-full flex items-center justify-center shrink-0 mt-0.5">2</span>
-              <span>출력된 종이의 <strong>노란색 접착면 가이드</strong>에 맞춰 실제 포스트잇을 붙이세요.</span>
-            </li>
-            <li className="flex gap-2">
-              <span className="bg-indigo-200 text-indigo-800 w-4 h-4 rounded-full flex items-center justify-center shrink-0 mt-0.5">3</span>
-              <span>화면에서 내용을 작성한 후, 포스트잇이 붙은 A4 용지를 프린터에 넣고 <strong>다시 인쇄</strong>하세요.</span>
-            </li>
-          </ol>
-        </section>
-
-        {/* Step 1: Layout Selection */}
-        <section>
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-sm font-bold text-slate-800 uppercase tracking-wider">1. 포스트잇 규격 선택</h2>
-          </div>
-          <div className="grid grid-cols-1 gap-3">
-            {layouts.map(layout => {
-              const isSelected = selectedLayoutId === layout.id;
-              return (
-                <label 
-                  key={layout.id} 
-                  className={`relative flex flex-col p-4 border-2 rounded-xl cursor-pointer transition-all duration-200 ${
-                    isSelected 
-                      ? 'border-indigo-600 bg-indigo-50/30 shadow-md shadow-indigo-100' 
-                      : 'border-slate-200 hover:border-indigo-300 hover:bg-slate-50'
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <span className={`font-bold ${isSelected ? 'text-indigo-900' : 'text-slate-700'}`}>
-                      {layout.name.split(' (')[0]}
-                    </span>
-                    <input
-                      type="radio"
-                      name="layout"
-                      value={layout.id}
-                      checked={isSelected}
-                      onChange={() => onSelectLayout(layout.id)}
-                      className="w-4 h-4 text-indigo-600 border-slate-300 focus:ring-indigo-500 rounded-full"
-                    />
-                  </div>
-                  <div className="mt-2 flex items-center justify-between text-xs">
-                    <span className="px-2 py-1 bg-white rounded-md border border-slate-100 text-slate-500 font-medium shadow-sm">
-                      {layout.postItWidth} × {layout.postItHeight} mm
-                    </span>
-                    <span className="text-slate-400">{(layout.description || '').split(' (')[0]}</span>
-                  </div>
-                </label>
-              );
-            })}
-          </div>
-        </section>
-
-        {/* Actual Size Preview */}
-        <section className="bg-slate-50 border border-slate-200 rounded-xl p-4 flex flex-col items-center">
-          <div className="w-full flex items-center justify-between mb-4">
-            <h2 className="text-sm font-bold text-slate-800">모니터 실물 사이즈 대조</h2>
-            <span className="text-[10px] bg-slate-200 text-slate-600 px-2 py-0.5 rounded-full font-bold">1:1 모니터 비교</span>
-          </div>
-          <p className="text-xs text-slate-500 text-center mb-4 px-2">
-            가이드에 실제 포스트잇을 직접 대어보고 크기가 맞는지 확인해 보세요.
-          </p>
-          <div className="relative border-2 border-indigo-400 border-dashed bg-indigo-50/50 flex items-center justify-center rounded-sm shadow-sm"
-               style={{
-                 width: `${selectedLayout.postItWidth}mm`,
-                 height: `${selectedLayout.postItHeight}mm`
-               }}>
-            <span className="text-[10px] font-bold text-indigo-400/80 rotate-[-15deg] select-none whitespace-nowrap">
-              여기에 포스트잇을 대보세요
-            </span>
-            <div className="absolute top-0 left-0 right-0 h-[15mm] bg-yellow-200/50 pointer-events-none border-b border-indigo-200 border-dashed"></div>
-          </div>
-          <p className="text-[10px] text-slate-400 mt-3 text-center">
-            * 모니터 해상도(DPI) 설정에 따라 1~2mm의 오차가 발생할 수 있습니다.
-          </p>
-        </section>
-
-        {/* Feedback Banner */}
-        <section className="bg-amber-50 border border-amber-200 rounded-xl p-4 flex flex-col items-center shadow-sm">
-          <span className="text-3xl mb-2 drop-shadow-sm" aria-hidden="true">💬</span>
-          <h2 className="text-sm font-extrabold text-amber-900 mb-1">더 나은 가이드를 함께 만들어요</h2>
-          <p className="text-xs text-amber-700/90 text-center mb-4 font-medium leading-relaxed">
-            맞지 않는 규격이나 인쇄 오류가 있다면<br/>GitHub에서 알려주세요.
-          </p>
-          <a 
-            href="https://github.com/nomelancholy/a4-sticky-guide/issues"
-            target="_blank"
-            rel="noreferrer"
-            className="w-full flex items-center justify-center space-x-2 bg-slate-900 hover:bg-slate-800 text-white font-bold py-2.5 px-4 rounded-lg transition-all shadow-sm hover:shadow active:scale-[0.98]"
-          >
-            <span className="tracking-tight">오류 제보 및 기능 제안</span>
-          </a>
-        </section>
-
+      <div className="custom-scrollbar flex-1 overflow-y-auto p-6">
+        <SidebarContent layouts={layouts} selectedLayoutId={selectedLayoutId} onSelectLayout={onSelectLayout} />
       </div>
 
-      <div className="p-4 bg-white/90 border-t border-slate-100 backdrop-blur-lg space-y-3 shadow-[0_-10px_20px_-5px_rgba(0,0,0,0.05)]">
-        <a
-          href="https://link.kakaopay.com/__/1FfrjxZ"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="group w-full flex items-center gap-3 bg-[#FEE500] hover:bg-[#FADA0A] text-[#191919] py-3 px-4 rounded-xl transition-all shadow-md hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-500 focus-visible:ring-offset-2 active:scale-[0.98]"
-          aria-label="카카오페이로 후원하기 (새 탭에서 열림)"
-        >
-          <span className="w-8 h-8 shrink-0 rounded-full bg-[#191919] text-[#FEE500] flex items-center justify-center text-sm" aria-hidden="true">♥</span>
-          <span className="min-w-0 flex-1 text-left">
-            <span className="block text-sm font-extrabold tracking-tight">카카오페이로 후원하기</span>
-            <span className="block text-[10px] font-semibold text-slate-700">무료 도구의 운영을 응원해 주세요</span>
-          </span>
-          <svg className="w-4 h-4 shrink-0 transition-transform group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-            <path strokeLinecap="round" strokeLinejoin="round" d="m9 18 6-6-6-6" />
-          </svg>
-        </a>
-
-        <div className="flex space-x-2">
-          <label className="flex-1 flex items-center justify-center space-x-2 cursor-pointer group bg-slate-50 p-2.5 rounded-lg border border-slate-200 hover:bg-slate-100 transition-colors">
-            <input 
-              type="checkbox" 
-              checked={showGuideInPrint}
-              onChange={onToggleGuide}
-              className="w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500 border-slate-300"
-            />
-            <span className="text-[11px] font-bold text-slate-600 group-hover:text-slate-800 transition-colors whitespace-nowrap">
-              가이드선 인쇄
-            </span>
-          </label>
-
-          <label className="flex-1 flex items-center justify-center space-x-2 cursor-pointer group bg-slate-50 p-2.5 rounded-lg border border-slate-200 hover:bg-slate-100 transition-colors">
-            <input 
-              type="checkbox" 
-              checked={!isColorMode}
-              onChange={onToggleColorMode}
-              className="w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500 border-slate-300"
-            />
-            <span className="text-[11px] font-bold text-slate-600 group-hover:text-slate-800 transition-colors whitespace-nowrap">
-              흑백 모드
-            </span>
-          </label>
-        </div>
-
-        <button 
-          onClick={handlePrintClick}
-          className="relative w-full overflow-hidden bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center space-x-2 group active:scale-[0.98]"
-        >
-          <svg className="w-4 h-4 group-hover:-translate-y-0.5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
-          <span className="tracking-wide">인쇄하기 (Print)</span>
-        </button>
+      <div className="border-t border-slate-100 bg-white/90 p-4 shadow-[0_-10px_20px_-5px_rgba(0,0,0,0.05)] backdrop-blur-lg">
+        <ActionPanel
+          variant="sidebar"
+          showGuideInPrint={showGuideInPrint}
+          onToggleGuide={onToggleGuide}
+          previewTone={previewTone}
+          onChangeTone={onChangeTone}
+          onPrint={onPrint}
+        />
       </div>
-
-      {/* Print Warning Modal */}
-      {showPrintWarning && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm transition-opacity">
-          <div
-            className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full mx-4 transform scale-100 transition-transform"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="print-warning-title"
-            aria-describedby="print-warning-description"
-          >
-            <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mb-6">
-              <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-            </div>
-            <h3 id="print-warning-title" className="text-2xl font-bold text-slate-900 mb-2">프린터 설정 확인</h3>
-            <p id="print-warning-description" className="text-slate-500 mb-6 leading-relaxed">
-              실제 사이즈로 정확하게 인쇄하기 위해, 인쇄 대화창에서 다음 설정을 반드시 확인해주세요.
-            </p>
-            <div className="bg-slate-50 rounded-xl p-4 mb-8 border border-slate-100 space-y-3">
-              <div className="flex items-start">
-                <span className="text-red-500 mr-2 mt-0.5">✓</span>
-                <div>
-                  <span className="font-bold text-slate-800">여백 (Margins): </span>
-                  <span className="text-red-600 font-bold">없음 (None)</span>
-                </div>
-              </div>
-              <div className="flex items-start">
-                <span className="text-red-500 mr-2 mt-0.5">✓</span>
-                <div>
-                  <span className="font-bold text-slate-800">배율 (Scale): </span>
-                  <span className="text-red-600 font-bold">100% (기본값)</span>
-                </div>
-              </div>
-            </div>
-            <div className="flex justify-end space-x-3">
-              <button 
-                onClick={() => setShowPrintWarning(false)}
-                className="px-5 py-2.5 text-sm font-bold text-slate-600 hover:bg-slate-100 rounded-xl transition-colors"
-              >
-                취소
-              </button>
-              <button 
-                onClick={confirmPrint}
-                className="px-5 py-2.5 text-sm font-bold bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl shadow-lg shadow-indigo-200 transition-all active:scale-95"
-              >
-                확인 및 인쇄
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </aside>
   );
-};
-
-export default Sidebar;
+}

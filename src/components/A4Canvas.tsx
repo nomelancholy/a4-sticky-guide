@@ -1,5 +1,5 @@
-import React from 'react';
-import type { LayoutConfig, PostItItem } from '../types';
+import { useEffect, useRef, useState } from 'react';
+import type { LayoutConfig, PostItItem, PreviewTone } from '../types';
 import PostItCell from './PostItCell';
 
 interface A4CanvasProps {
@@ -7,23 +7,45 @@ interface A4CanvasProps {
   items: PostItItem[];
   updateItem: (id: number, updates: Partial<PostItItem>) => void;
   showGuideInPrint: boolean;
-  isColorMode: boolean;
+  previewTone: PreviewTone;
   onApplyToAll: (id: number) => void;
 }
 
-const A4Canvas: React.FC<A4CanvasProps> = ({
+const MM_TO_PX = 96 / 25.4;
+
+/** 컨테이너가 A4보다 좁으면(모바일) 비율을 유지한 채 축소한다. 인쇄 시에는 CSS로 해제된다. */
+function useFitScale(widthPx: number) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [scale, setScale] = useState(1);
+
+  useEffect(() => {
+    const element = containerRef.current;
+    if (!element || typeof ResizeObserver === 'undefined') return;
+
+    const observer = new ResizeObserver((entries) => {
+      const width = entries[0]?.contentRect.width ?? widthPx;
+      setScale(width >= widthPx ? 1 : width / widthPx);
+    });
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [widthPx]);
+
+  return { containerRef, scale };
+}
+
+export default function A4Canvas({
   layout,
   items,
   updateItem,
   showGuideInPrint,
-  isColorMode,
-  onApplyToAll
-}) => {
+  previewTone,
+  onApplyToAll,
+}: A4CanvasProps) {
   const isLandscape = layout.a4Orientation === 'landscape';
-  
-  // A4 dimensions: 210mm x 297mm
-  const a4Width = isLandscape ? '297mm' : '210mm';
-  const a4Height = isLandscape ? '210mm' : '297mm';
+  const a4WidthMm = isLandscape ? 297 : 210;
+  const a4HeightMm = isLandscape ? 210 : 297;
+  const { containerRef, scale } = useFitScale(a4WidthMm * MM_TO_PX);
+  const isScaled = scale < 1;
 
   const gridStyle = {
     display: 'grid',
@@ -32,47 +54,56 @@ const A4Canvas: React.FC<A4CanvasProps> = ({
   };
 
   return (
-    <div 
-      className="relative bg-white shadow-[0_20px_50px_-12px_rgba(0,0,0,0.15)] print:shadow-none print:m-0 flex flex-col mx-auto border border-slate-300 print:border-none print:border-0 rounded-sm print:rounded-none overflow-hidden"
-      style={{
-        width: a4Width,
-        height: a4Height,
-      }}
-    >
-      {/* Feed Indicator */}
-      <div 
-        className={`absolute top-0 w-full flex items-center justify-center pt-3 text-slate-400 select-none ${
-          !showGuideInPrint ? 'print:hidden' : ''
-        }`}
+    <div ref={containerRef} className="flex w-full justify-center print:block print:w-auto">
+      <div
+        className="print:h-auto! print:w-auto!"
+        style={
+          isScaled
+            ? { width: a4WidthMm * MM_TO_PX * scale, height: a4HeightMm * MM_TO_PX * scale }
+            : undefined
+        }
       >
-        <div className="flex items-center space-x-2 bg-slate-50/80 backdrop-blur-sm px-4 py-1.5 rounded-full border border-slate-100 shadow-sm print:bg-transparent print:border-none print:shadow-none">
-          <svg className="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path></svg>
-          <span className="text-xs font-bold tracking-wide">프린터 급지 방향 (종이가 들어가는 쪽)</span>
-        </div>
-      </div>
-
-      {/* Grid Container */}
-      <div className="flex-1 p-[10mm] w-full h-full flex items-center justify-center pt-[20mm]">
-        <div 
-          className={layout.gap || 'gap-[3mm]'} 
-          style={gridStyle}
+        <div
+          className="relative mx-auto flex origin-top-left flex-col overflow-hidden rounded-sm border border-slate-300 bg-white shadow-[0_20px_50px_-12px_rgba(0,0,0,0.15)] print:m-0 print:transform-none! print:rounded-none print:border-0 print:border-none print:shadow-none"
+          style={{
+            width: `${a4WidthMm}mm`,
+            height: `${a4HeightMm}mm`,
+            transform: isScaled ? `scale(${scale})` : undefined,
+          }}
         >
-          {items.map((item, index) => (
-            <PostItCell
-              key={item.id}
-              item={item}
-              layout={layout}
-              updateItem={updateItem}
-              showGuideInPrint={showGuideInPrint}
-              isColorMode={isColorMode}
-              onApplyToAll={() => onApplyToAll(item.id)}
-              isFirst={index === 0}
-            />
-          ))}
+          {/* Feed Indicator */}
+          <div
+            className={`absolute top-0 flex w-full select-none items-center justify-center pt-3 text-slate-400 ${
+              !showGuideInPrint ? 'print:hidden' : ''
+            }`}
+          >
+            <div className="flex items-center space-x-2 rounded-full border border-slate-100 bg-slate-50/80 px-4 py-1.5 shadow-sm backdrop-blur-sm print:border-none print:bg-transparent print:shadow-none">
+              <svg className="h-4 w-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+              </svg>
+              <span className="text-xs font-bold tracking-wide">프린터 급지 방향 (종이가 들어가는 쪽)</span>
+            </div>
+          </div>
+
+          {/* Grid Container */}
+          <div className="flex h-full w-full flex-1 items-center justify-center p-[10mm] pt-[20mm]">
+            <div className={layout.gap || 'gap-[3mm]'} style={gridStyle}>
+              {items.map((item, index) => (
+                <PostItCell
+                  key={item.id}
+                  item={item}
+                  layout={layout}
+                  updateItem={updateItem}
+                  showGuideInPrint={showGuideInPrint}
+                  previewTone={previewTone}
+                  onApplyToAll={() => onApplyToAll(item.id)}
+                  isFirst={index === 0}
+                />
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </div>
   );
-};
-
-export default A4Canvas;
+}
