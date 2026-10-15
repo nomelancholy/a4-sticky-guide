@@ -130,13 +130,13 @@ export default function ActionPanel({
         href={SUPPORT_URL}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex items-center justify-center gap-1.5 rounded-lg py-1.5 text-xs font-semibold text-slate-600 transition-colors hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+        className="flex min-h-14 w-full items-center justify-center gap-2 rounded-xl bg-[#FEE500] px-4 py-3 text-base font-extrabold text-black shadow-md shadow-yellow-200/60 transition-colors hover:bg-[#FADA0A] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2"
         aria-label="카카오페이로 후원하기 (새 탭에서 열림)"
       >
-        <svg className="h-3.5 w-3.5 text-yellow-500" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <svg className="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
           <path d="M12 21s-7-4.6-9.3-9A5.3 5.3 0 0 1 12 6.6 5.3 5.3 0 0 1 21.3 12C19 16.4 12 21 12 21z" />
         </svg>
-        도움이 됐다면 카카오페이로 후원하기
+        카카오페이로 후원하기
       </a>
     </div>
   );
