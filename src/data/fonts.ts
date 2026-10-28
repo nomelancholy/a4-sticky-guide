@@ -29,5 +29,5 @@ export const fontGroups: FontGroup[] = [
 
 export const DEFAULT_FONT_FAMILY = fontGroups[0].fonts[0].value;
 
-export const SUPPORT_URL = 'https://link.kakaopay.com/__/1FfrjxZ';
+export const SUPPORT_URL = 'https://link.kakaopay.com/__/ffe10Qe';
 export const ISSUES_URL = 'https://github.com/nomelancholy/a4-sticky-guide/issues';
